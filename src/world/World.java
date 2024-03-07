@@ -1,5 +1,8 @@
 package world;
 
+import entities.*;
+import main.Game;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -21,18 +24,31 @@ public class World {
 
             for(int xx = 0; xx< map.getWidth(); xx++) {
                 for(int yy = 0; yy < map.getHeight(); yy++) {
-                    if(pixels[xx + (yy * map.getWidth())] == 0xFF000000) {
+                    int pixelAtual = pixels[xx + (yy * map.getWidth())];
+                    tiles[xx + (yy * WIDTH)] = new FloorTile(xx*16, yy*16, Tile.TILE_FLOOR);
+
+                    if(pixelAtual == 0xFF000000) {
                         //Grass
                         tiles[xx + (yy * WIDTH)] = new FloorTile(xx*16, yy*16, Tile.TILE_FLOOR);
-                    } else if(pixels[xx + (yy * map.getWidth())] == 0xFFFFFFFF) {
+                    } else if(pixelAtual == 0xFFFFFFFF) {
                         //Wall
                         tiles[xx + (yy * WIDTH)] = new WallTile(xx*16, yy*16, Tile.TILE_WALL);
-                    } else if (pixels[xx + (yy * map.getWidth())] == 0xFF0026FF) {
+                    } else if (pixelAtual == 0xFF0026FF) {
                         //Player
-                        tiles[xx + (yy * WIDTH)] = new FloorTile(xx*16, yy*16, Tile.TILE_FLOOR);
-                    } else {
-                        //Floor
-                        tiles[xx + (yy * WIDTH)] = new FloorTile(xx*16, yy*16, Tile.TILE_FLOOR);
+                        Game.player.setX(xx*16);
+                        Game.player.setY(yy*16);
+                    } else if (pixelAtual == 0xFFFF0000) {
+                        //Enemy
+                        Game.entities.add(new Enemy(xx*16, yy*16, 16, 16, Entity.ENEMY_EN));
+                    } else if(pixelAtual == 0xFFFF6A00) {
+                        //Weapon
+                        Game.entities.add(new Weapon(xx*16, yy*16, 16, 16, Entity.WEAPON_EN));
+                    } else if(pixelAtual == 0xFF00FF21) {
+                        //LifePack
+                        Game.entities.add(new LifePack(xx*16, yy*16, 16, 16, Entity.LIFEPACK_EN));
+                    } else if(pixelAtual == 0xFFFFD800) {
+                        //Bullet
+                        Game.entities.add(new Bullet(xx*16, yy*16, 16, 16, Entity.BULLET_EN));
                     }
                 }
             }

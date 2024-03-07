@@ -20,14 +20,15 @@ public class Game extends Canvas implements Runnable, KeyListener  {
     public static JFrame frame;
     private Thread thread;
     private boolean isRunning = true;
-    private final int WIDTH = 240, HEIGHT = 160, SCALE = 3;
+    private final int WIDTH = 320, HEIGHT = 240, SCALE = 3;
 
     private BufferedImage image;
 
-    public List<Entity> entities;
+    public static List<Entity> entities;
     public static SpriteSheet spritesheet;
 
     public static World world;
+    public static Player player;
 
     public Game() {
         addKeyListener(this);
@@ -36,10 +37,11 @@ public class Game extends Canvas implements Runnable, KeyListener  {
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         entities = new ArrayList<Entity>();
         spritesheet = new SpriteSheet("/spritesheet.png");
-        world = new World("/map.png");
 
-        Player player = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
+        player = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
         entities.add(player);
+
+        world = new World("/map.png");
     }
 
     public void initFrame() {
@@ -162,6 +164,12 @@ public class Game extends Canvas implements Runnable, KeyListener  {
             Player player = (Player) entities.get(0);
             player.down = true;
         }
+
+//        if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+//            //Correr
+//            Player player = (Player) entities.get(0);
+//            player.sprint = true;
+//        }
     }
 
     @Override

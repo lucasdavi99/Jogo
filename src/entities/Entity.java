@@ -1,9 +1,16 @@
 package entities;
 
+import main.Game;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Entity {
+
+    public static BufferedImage LIFEPACK_EN = Game.spritesheet.getSprite(8*16, 0, 16, 16);
+    public static BufferedImage WEAPON_EN = Game.spritesheet.getSprite(9*16, 0, 16, 16);
+    public static BufferedImage BULLET_EN = Game.spritesheet.getSprite(9*16, 16, 16, 16);
+    public static BufferedImage ENEMY_EN = Game.spritesheet.getSprite(0, 16, 16, 16);
 
     protected  int x;
     protected int y;
