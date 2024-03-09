@@ -43,7 +43,7 @@ public class Player extends Entity{
         }
 
         for (int i = 0; i < 4; i++) {
-            downPlayer[i] = Game.spritesheet.getSprite(32, + (i * 16), 16, 16);
+            downPlayer[i] = Game.spritesheet.getSprite(32, (i * 16), 16, 16);
         }
     }
 
