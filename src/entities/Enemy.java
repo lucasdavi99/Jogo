@@ -50,20 +50,27 @@ public class Enemy extends Entity{
     }
 
     public void tick() {
-        if (x < Game.player.getX() && World.isFree((x+speed), this.getY()) && isColliding(x + speed, this.getY())) {
-            currentDirection = "right";
-            x+=speed;
-        } else if (x > Game.player.getX() && World.isFree((x-speed), this.getY()) && isColliding(x - speed, this.getY())) {
-            currentDirection = "left";
-            x-=speed;
-        }
+        if (!isCollidingWithPlayer()) {
+            if (x < Game.player.getX() && World.isFree((x+speed), this.getY()) && isColliding(x + speed, this.getY())) {
+                currentDirection = "right";
+                x+=speed;
+            } else if (x > Game.player.getX() && World.isFree((x-speed), this.getY()) && isColliding(x - speed, this.getY())) {
+                currentDirection = "left";
+                x-=speed;
+            }
 
-        if (y < Game.player.getY() && World.isFree(this.getX(), (y+speed)) && isColliding(this.getX(), y + speed)){
-            currentDirection = "down";
-            y+=speed;
-        } else if (y > Game.player.getY() && World.isFree(this.getX(), (y-speed)) && isColliding(this.getX(), y - speed)){
-            currentDirection = "up";
-            y-=speed;
+            if (y < Game.player.getY() && World.isFree(this.getX(), (y+speed)) && isColliding(this.getX(), y + speed)){
+                currentDirection = "down";
+                y+=speed;
+            } else if (y > Game.player.getY() && World.isFree(this.getX(), (y-speed)) && isColliding(this.getX(), y - speed)){
+                currentDirection = "up";
+                y-=speed;
+            }
+        } else {
+            if (Game.rand.nextInt(100) < 10) {
+                Game.player.life -= 1;
+                System.out.println("Vida: " + Game.player.life);
+            }
         }
 
 
@@ -90,6 +97,12 @@ public class Enemy extends Entity{
             }
         }
         return true;
+    }
+
+    public boolean isCollidingWithPlayer() {
+        Rectangle enemyCurrent = new Rectangle(this.getX() + maskX, this.getY() + maskY, maskW, maskH);
+        Rectangle player = new Rectangle(Game.player.getX(), Game.player.getY(), 16, 16);
+        return enemyCurrent.intersects(player);
     }
 
     public void render(Graphics g) {

@@ -9,7 +9,8 @@ import java.awt.image.BufferedImage;
 
 public class Player extends Entity{
     public boolean right, up, left, down;
-    public int speed = 2;
+    public int speed = 3;
+    public int life = 100;
 
     private int frames = 0;
     private int index = 0;
