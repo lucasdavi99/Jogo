@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 
 public class Enemy extends Entity{
 
-    private int speed = 1;
+    private double speed = 1;
     private int maskX = 8, maskY = 8, maskW = 10, maskH = 10;
     private int frames = 0;
     private int index = 0;
@@ -51,18 +51,18 @@ public class Enemy extends Entity{
 
     public void tick() {
         if (!isCollidingWithPlayer()) {
-            if (x < Game.player.getX() && World.isFree((x+speed), this.getY()) && isColliding(x + speed, this.getY())) {
+            if (x < Game.player.getX() && World.isFree((int) Math.round(x+speed), this.getY()) && isColliding((int) Math.round(x + speed), this.getY())) {
                 currentDirection = "right";
                 x+=speed;
-            } else if (x > Game.player.getX() && World.isFree((x-speed), this.getY()) && isColliding(x - speed, this.getY())) {
+            } else if (x > Game.player.getX() && World.isFree((int) Math.round(x-speed), this.getY()) && isColliding((int) Math.round(x - speed), this.getY())) {
                 currentDirection = "left";
                 x-=speed;
             }
 
-            if (y < Game.player.getY() && World.isFree(this.getX(), (y+speed)) && isColliding(this.getX(), y + speed)){
+            if (y < Game.player.getY() && World.isFree(this.getX(), (int) Math.round(y+speed)) && isColliding(this.getX(), (int) Math.round(y + speed))){
                 currentDirection = "down";
                 y+=speed;
-            } else if (y > Game.player.getY() && World.isFree(this.getX(), (y-speed)) && isColliding(this.getX(), y - speed)){
+            } else if (y > Game.player.getY() && World.isFree(this.getX(), (int) Math.round(y-speed)) && isColliding(this.getX(), (int) Math.round(y - speed))){
                 currentDirection = "up";
                 y-=speed;
             }

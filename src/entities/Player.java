@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 
 public class Player extends Entity{
     public boolean right, up, left, down;
-    public int speed = 10;
+    public double speed = 2;
     public double life = 100, maxLife = 100;
 
     private int frames = 0;
@@ -50,20 +50,20 @@ public class Player extends Entity{
 
     public void tick() {
         moved = false;
-        if(right && World.isFree(this.getX() + speed, this.getY())) {
-            moved = true;
-            x++;
-        } else if(left && World.isFree(this.getX() - speed, this.getY())) {
-            moved = true;
-            x--;
+        if(right && World.isFree((int) Math.round(this.getX() + speed), this.getY())) {
+        moved = true;
+        x += speed;
+        } else if(left && World.isFree((int) Math.round(this.getX() - speed), this.getY())) {
+        moved = true;
+        x -= speed;
         }
 
-        if(up && World.isFree(this.getX(), this.getY() - speed)) {
+        if(up && World.isFree(this.getX(),(int) Math.round(this.getY() - speed))) {
             moved = true;
-            y--;
-        } else if(down && World.isFree(this.getX(), this.getY() + speed)){
+            y-=speed;
+        } else if(down && World.isFree(this.getX(), (int) Math.round(this.getY() + speed))){
             moved = true;
-            y++;
+            y+=speed;
         }
 
         if(moved) {
