@@ -25,6 +25,7 @@ public class Player extends Entity{
     private BufferedImage[] downPlayer;
 
     private boolean moved = false;
+    private boolean hasGun = false;
 
     public Player(int x, int y, int width, int height, BufferedImage sprite) {
         super(x, y, width, height, sprite);
@@ -82,6 +83,7 @@ public class Player extends Entity{
 
         checkCollisionLifePack();
         checkCollisionAmmo();
+        checkCollisionGun();
 
         if (life <= 0) {
             Game.entities.clear();
@@ -118,9 +120,18 @@ public class Player extends Entity{
             Entity e = Game.entities.get(i);
             if (Entity.isColliding(this, e) && e instanceof Bullet) {
                 ammo += 8;
-                if (ammo >= 100) {
-                    ammo = 100;
-                }
+                Game.entities.remove(i);
+                return;
+            }
+        }
+    }
+
+    public void checkCollisionGun() {
+        for (int i  = 0; i < Game.entities.size(); i++) {
+            Entity e = Game.entities.get(i);
+            if (Entity.isColliding(this, e) && e instanceof Weapon) {
+                hasGun = true;
+                System.out.println("Pegou a arma");
                 Game.entities.remove(i);
                 return;
             }
@@ -128,16 +139,36 @@ public class Player extends Entity{
     }
 
     public void render(Graphics g) {
+        int gunWidth = 13;
+        int gunHeight = 13;
+
         if(right) {
             g.drawImage(rightPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+            if (hasGun) {
+                g.drawImage(Entity.GUN_RIGHT, this.getX() - Camera.x + 10, this.getY() - Camera.y, gunWidth, gunHeight, null);
+            }
         } else if(left) {
             g.drawImage(leftPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+            if (hasGun) {
+                g.drawImage(Entity.GUN_LEFT, this.getX() - Camera.x - 10, this.getY() - Camera.y, gunWidth, gunHeight, null);
+            }
         } else if(up) {
             g.drawImage(upPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+            if (hasGun) {
+                g.drawImage(Entity.GUN_UP, this.getX() - Camera.x, this.getY() - Camera.y - 10, gunWidth, gunHeight, null);
+            }
         } else if(down) {
             g.drawImage(downPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+            if (hasGun) {
+                g.drawImage(Entity.GUN_DOWN, this.getX() - Camera.x, this.getY() - Camera.y + 10, gunWidth, gunHeight, null);
+            }
         } else {
-            g.drawImage(sprite, this.getX() - Camera.x, this.getY() - Camera.y, null);
+            g.drawImage(rightPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+            if (hasGun) {
+                g.drawImage(Entity.GUN_RIGHT, this.getX() - Camera.x + 10, this.getY() - Camera.y, gunWidth, gunHeight, null);
+            } else {
+                g.drawImage(rightPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+            }
         }
     }
 }

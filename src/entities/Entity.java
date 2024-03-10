@@ -12,6 +12,10 @@ public class Entity {
     public static BufferedImage WEAPON_EN = Game.spritesheet.getSprite(9*16, 0, 16, 16);
     public static BufferedImage BULLET_EN = Game.spritesheet.getSprite(9*16, 16, 16, 16);
     public static BufferedImage ENEMY_EN = Game.spritesheet.getSprite(0, 16, 16, 16);
+    public static BufferedImage GUN_RIGHT = Game.spritesheet.getSprite(128, 16, 16, 16);
+    public static BufferedImage GUN_LEFT = Game.spritesheet.getSprite(128, 32, 16, 16);
+    public static BufferedImage GUN_UP = Game.spritesheet.getSprite(128, 48, 16, 16);
+    public static BufferedImage GUN_DOWN = Game.spritesheet.getSprite(128, 64, 16, 16);
 
     protected  int x;
     protected int y;
