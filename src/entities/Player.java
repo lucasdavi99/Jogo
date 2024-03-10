@@ -26,6 +26,7 @@ public class Player extends Entity{
 
     private boolean moved = false;
     private boolean hasGun = false;
+    public boolean shoot = false;
 
     public Player(int x, int y, int width, int height, BufferedImage sprite) {
         super(x, y, width, height, sprite);
@@ -85,6 +86,15 @@ public class Player extends Entity{
         checkCollisionAmmo();
         checkCollisionGun();
 
+        if (shoot) {
+            shoot = false;
+            if (hasGun && ammo > 0) {
+                ammo--;
+                BulletShoot bullet = getBulletShoot();
+                Game.bullets.add(bullet);
+            }
+        }
+
         if (life <= 0) {
             Game.entities.clear();
             Game.enemies.clear();
@@ -99,6 +109,29 @@ public class Player extends Entity{
 
         Camera.x = Camera.clamp(this.getX() - (Game.WIDTH / 2), 0, World.WIDTH * 16 - Game.WIDTH);
         Camera.y = Camera.clamp(this.getY() - (Game.HEIGHT / 2), 0, World.HEIGHT * 16 - Game.HEIGHT);
+    }
+
+    private BulletShoot getBulletShoot() {
+        int dx = 0;
+        int dy = 0;
+        int px = 0;
+        int py = 6;
+        if (right) {
+            dx = 1;
+            px = 6;
+        } else if (left) {
+            dx = -1;
+            px = -6;
+        } else if (up) {
+            dy = -1;
+            py = -6;
+        } else if (down) {
+            dy = 1;
+        } else {
+            dx = 1;
+            px = 6;
+        }
+        return new BulletShoot(this.getX() + px, this.getY() + py, 3, 3, null, dx, dy);
     }
 
     public void checkCollisionLifePack() {
@@ -119,7 +152,7 @@ public class Player extends Entity{
         for (int i  = 0; i < Game.entities.size(); i++) {
             Entity e = Game.entities.get(i);
             if (Entity.isColliding(this, e) && e instanceof Bullet) {
-                ammo += 8;
+                ammo += 20;
                 Game.entities.remove(i);
                 return;
             }
@@ -131,6 +164,7 @@ public class Player extends Entity{
             Entity e = Game.entities.get(i);
             if (Entity.isColliding(this, e) && e instanceof Weapon) {
                 hasGun = true;
+                ammo = 20;
                 System.out.println("Pegou a arma");
                 Game.entities.remove(i);
                 return;

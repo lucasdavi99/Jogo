@@ -1,5 +1,6 @@
 package main;
 
+import entities.BulletShoot;
 import entities.Enemy;
 import entities.Entity;
 import entities.Player;
@@ -30,6 +31,7 @@ public class Game extends Canvas implements Runnable, KeyListener  {
 
     public static List<Entity> entities;
     public static List<Enemy> enemies;
+    public static List<BulletShoot> bullets;
     public static SpriteSheet spritesheet;
 
     public static World world;
@@ -48,6 +50,7 @@ public class Game extends Canvas implements Runnable, KeyListener  {
         image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         entities = new ArrayList<>();
         enemies = new ArrayList<>();
+        bullets = new ArrayList<>();
         spritesheet = new SpriteSheet("/spritesheet.png");
 
         player = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
@@ -94,6 +97,10 @@ public class Game extends Canvas implements Runnable, KeyListener  {
             e.tick();
         }
 
+        for (int i = 0; i < bullets.size(); i++) {
+            bullets.get(i).tick();
+        }
+
     }
 
     public void render() {
@@ -111,6 +118,11 @@ public class Game extends Canvas implements Runnable, KeyListener  {
             Entity e = entities.get(i);
             e.render(g);
         }
+
+        for (int i = 0; i < bullets.size(); i++) {
+            bullets.get(i).render(g);
+        }
+
         ui.render(g);
 
         g.dispose();//Limpar dados de imagem não usados
@@ -179,6 +191,12 @@ public class Game extends Canvas implements Runnable, KeyListener  {
             //Baixo
             Player player = (Player) entities.get(0);
             player.down = true;
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            //Atirar
+            Player player = (Player) entities.get(0);
+            player.shoot = true;
         }
 
 //        if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
