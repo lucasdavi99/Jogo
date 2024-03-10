@@ -116,6 +116,9 @@ public class Game extends Canvas implements Runnable, KeyListener  {
         g.dispose();//Limpar dados de imagem não usados
         g = bs.getDrawGraphics();
         g.drawImage(image, 0, 0, WIDTH*SCALE, HEIGHT*SCALE,null);
+        g.setFont(new Font("arial", Font.BOLD, 20));
+        g.setColor(Color.WHITE);
+        g.drawString("Ammo: " + player.ammo, 580, 30);
         bs.show();
     }
 
