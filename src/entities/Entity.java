@@ -19,16 +19,30 @@ public class Entity {
     protected int height;
     protected BufferedImage sprite;
 
+    private int maskX, maskY, maskW, maskH;
+
     public Entity(int x, int y, int width, int height, BufferedImage sprite) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.sprite = sprite;
+
+        this.maskX = 0;
+        this.maskY = 0;
+        this.maskW = width;
+        this.maskH = height;
     }
 
     public void tick() {
 
+    }
+
+    public static boolean isColliding(Entity e1, Entity e2) {
+        Rectangle e1Mask = new Rectangle(e1.getX() + e1.maskX, e1.getY() + e1.maskY, e1.maskW, e1.maskH);
+        Rectangle e2Mask = new Rectangle(e2.getX() + e2.maskX, e2.getY() + e2.maskY, e2.maskW, e2.maskH);
+
+        return e1Mask.intersects(e2Mask);
     }
 
     public void render(Graphics g) {
@@ -73,5 +87,12 @@ public class Entity {
 
     public void setSprite(BufferedImage sprite) {
         this.sprite = sprite;
+    }
+
+    public void setMask(int maskX, int maskY, int maskW, int maskH) {
+        this.maskX = maskX;
+        this.maskY = maskY;
+        this.maskW = maskW;
+        this.maskH = maskH;
     }
 }
