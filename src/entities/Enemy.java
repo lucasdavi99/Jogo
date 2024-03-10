@@ -14,7 +14,7 @@ public class Enemy extends Entity{
     private int frames = 0;
     private int index = 0;
     private final int maxFrames = 30;
-    private final int maxIndex = 0;
+    private final int maxIndex = 1;
 
     private BufferedImage[] rightEnemy;
     private BufferedImage[] leftEnemy;
@@ -33,19 +33,19 @@ public class Enemy extends Entity{
         downEnemy = new BufferedImage[2];
 
         for(int i = 0; i < 2; i++) {
-            rightEnemy[i] = Game.spritesheet.getSprite(16, 48 + (i + 16), 16, 16);
+            rightEnemy[i] = Game.spritesheet.getSprite(16, 48 + (i * 16), 16, 16);
         }
 
         for(int i = 0; i < 2; i++) {
-            leftEnemy[i] = Game.spritesheet.getSprite(0, 48 + (i + 16), 16, 16);
+            leftEnemy[i] = Game.spritesheet.getSprite(0, 48 + (i * 16), 16, 16);
         }
 
         for (int i = 0; i < 2; i++) {
-            upEnemy[i] = Game.spritesheet.getSprite(16, 16 + (i + 16), 16, 16);
+            upEnemy[i] = Game.spritesheet.getSprite(16, 16 + (i * 16), 16, 16);
         }
 
         for (int i = 0; i < 2; i++) {
-            downEnemy[i] = Game.spritesheet.getSprite(0, 16 + (i + 16), 16, 16);
+            downEnemy[i] = Game.spritesheet.getSprite(0, 16 + (i * 16), 16, 16);
         }
     }
 
