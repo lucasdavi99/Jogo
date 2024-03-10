@@ -13,7 +13,7 @@ public class Enemy extends Entity{
     private int maskX = 8, maskY = 8, maskW = 10, maskH = 10;
     private int frames = 0;
     private int index = 0;
-    private final int maxFrames = 30;
+    private final int maxFrames = 20;
     private final int maxIndex = 1;
 
     private BufferedImage[] rightEnemy;

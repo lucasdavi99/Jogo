@@ -1,16 +1,19 @@
 package entities;
 
+import graficos.SpriteSheet;
 import main.Game;
 import world.Camera;
 import world.World;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class Player extends Entity{
     public boolean right, up, left, down;
     public double speed = 2;
     public double life = 100, maxLife = 100;
+    public int ammo= 0;
 
     private int frames = 0;
     private int index = 0;
@@ -20,7 +23,6 @@ public class Player extends Entity{
     private BufferedImage[] leftPlayer;
     private BufferedImage[] upPlayer;
     private BufferedImage[] downPlayer;
-    public int ammo= 0;
 
     private boolean moved = false;
 
@@ -80,6 +82,18 @@ public class Player extends Entity{
 
         checkCollisionLifePack();
         checkCollisionAmmo();
+
+        if (life <= 0) {
+            Game.entities.clear();
+            Game.enemies.clear();
+            Game.entities = new ArrayList<>();
+            Game.enemies = new ArrayList<>();
+            Game.spritesheet = new SpriteSheet("/spritesheet.png");
+            Game.player = new Player(0, 0, 16, 16, Game.spritesheet.getSprite(32, 0, 16, 16));
+            Game.entities.add(Game.player);
+            Game.world = new World("/map.png");
+            return;
+        }
 
         Camera.x = Camera.clamp(this.getX() - (Game.WIDTH / 2), 0, World.WIDTH * 16 - Game.WIDTH);
         Camera.y = Camera.clamp(this.getY() - (Game.HEIGHT / 2), 0, World.HEIGHT * 16 - Game.HEIGHT);
