@@ -15,6 +15,7 @@ public class Enemy extends Entity{
     private int index = 0;
     private final int maxFrames = 20;
     private final int maxIndex = 1;
+    private int life = 10;
 
     private BufferedImage[] rightEnemy;
     private BufferedImage[] leftEnemy;
@@ -73,7 +74,6 @@ public class Enemy extends Entity{
             }
         }
 
-
         frames++;
         if(frames == maxFrames) {
             frames = 0;
@@ -81,6 +81,13 @@ public class Enemy extends Entity{
             if(index > maxIndex) {
                 index = 0;
             }
+        }
+
+        collidingBullet();
+
+        if (life <= 0) {
+            Game.entities.remove(this);
+            Game.enemies.remove(this);
         }
     }
 
@@ -103,6 +110,19 @@ public class Enemy extends Entity{
         Rectangle enemyCurrent = new Rectangle(this.getX() + maskX, this.getY() + maskY, maskW, maskH);
         Rectangle player = new Rectangle(Game.player.getX(), Game.player.getY(), 16, 16);
         return enemyCurrent.intersects(player);
+    }
+
+    public void collidingBullet() {
+        for (int i = 0; i < Game.bullets.size(); i++) {
+            Entity e = Game.bullets.get(i);
+            if (Entity.isColliding(this, e)) {
+                life--;
+                Game.bullets.remove(i);
+                return;
+            }
+
+
+        }
     }
 
     public void render(Graphics g) {
