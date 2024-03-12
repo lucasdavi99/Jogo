@@ -32,6 +32,7 @@ public class Enemy extends Entity{
         leftEnemy = new BufferedImage[2];
         upEnemy = new BufferedImage[2];
         downEnemy = new BufferedImage[2];
+        currentDirection = "right";
 
         for(int i = 0; i < 2; i++) {
             rightEnemy[i] = Game.spritesheet.getSprite(16, 48 + (i * 16), 16, 16);
@@ -126,24 +127,12 @@ public class Enemy extends Entity{
     }
 
     public void render(Graphics g) {
-        BufferedImage[] currentSprites;
-
-        switch (currentDirection) {
-            case "right":
-                currentSprites = rightEnemy;
-                break;
-            case "left":
-                currentSprites = leftEnemy;
-                break;
-            case "up":
-                currentSprites = upEnemy;
-                break;
-            case "down":
-                currentSprites = downEnemy;
-                break;
-            default:
-                currentSprites = upEnemy;
-        }
+        BufferedImage[] currentSprites = switch (currentDirection) {
+            case "right" -> rightEnemy;
+            case "left" -> leftEnemy;
+            case "down" -> downEnemy;
+            default -> upEnemy;
+        };
 
         if (index >= 0 && index < currentSprites.length) {
             g.drawImage(currentSprites[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
