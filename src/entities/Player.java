@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class Player extends Entity{
+public class Player extends Entity {
     public boolean right, up, left, down;
     public double speed = 2;
     public double life = 100, maxLife = 100;
