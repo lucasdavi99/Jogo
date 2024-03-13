@@ -26,7 +26,7 @@ public class Game extends Canvas implements Runnable, KeyListener  {
     private Thread thread;
     private boolean isRunning = true;
     public static int WIDTH = 320, HEIGHT = 240;
-    private final int SCALE = 3;
+    public static final int SCALE = 3;
 
     private final BufferedImage image;
     private int CUR_LEVEL = 1, MAX_LEVEL = 2;
@@ -39,9 +39,10 @@ public class Game extends Canvas implements Runnable, KeyListener  {
 
     public static World world;
     public static Player player;
+    public Menu menu;
 
     public static Random rand;
-    public static String gameState = "NORMAL";
+    public static String gameState = "MENU";
 
     public UI ui;
 
@@ -61,6 +62,8 @@ public class Game extends Canvas implements Runnable, KeyListener  {
         entities.add(player);
 
         world = new World("/level1.png");
+
+        menu = new Menu();
     }
 
     public void initFrame() {
@@ -96,7 +99,7 @@ public class Game extends Canvas implements Runnable, KeyListener  {
 
     public void tick() {
 
-        if (gameState == "NORMAL") {
+        if (Objects.equals(gameState, "NORMAL")) {
             restartGame = false;
             for (int i = 0; i < entities.size(); i++) {
                 Entity e = entities.get(i);
@@ -115,7 +118,7 @@ public class Game extends Canvas implements Runnable, KeyListener  {
                 String newWorld = "level" + CUR_LEVEL + ".png";
                 World.restartGame(newWorld);
             }
-        } else if (gameState == "GAME_OVER") {
+        } else if (Objects.equals(gameState, "GAME_OVER")) {
             //Game Over
             if (restartGame) {
                 restartGame = false;
@@ -124,6 +127,9 @@ public class Game extends Canvas implements Runnable, KeyListener  {
                 String newWorld = "level" + CUR_LEVEL + ".png";
                 World.restartGame(newWorld);
             }
+        } else if (Objects.equals(gameState, "MENU")) {
+            //Menu
+            menu.tick();
         }
     }
 
@@ -155,7 +161,12 @@ public class Game extends Canvas implements Runnable, KeyListener  {
         g.setFont(new Font("arial", Font.BOLD, 20));
         g.setColor(Color.WHITE);
         g.drawString("Ammo: " + player.ammo, 580, 30);
-        gameOverText(g);
+        if (Objects.equals(gameState, "GAME_OVER")) {
+            gameOverText(g);
+        } else if (Objects.equals(gameState, "MENU")) {
+            menu.render(g);
+
+        }
         bs.show();
     }
 
@@ -224,10 +235,16 @@ public class Game extends Canvas implements Runnable, KeyListener  {
             //Cima
             Player player = (Player) entities.get(0);
             player.up = true;
+            if (Objects.equals(gameState, "MENU")) {
+                menu.up = true;
+            }
         } else if (e.getKeyCode() == KeyEvent.VK_S) {
             //Baixo
             Player player = (Player) entities.get(0);
             player.down = true;
+            if (Objects.equals(gameState, "MENU")) {
+                menu.down = true;
+            }
         }
 
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
