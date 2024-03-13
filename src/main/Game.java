@@ -17,6 +17,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class Game extends Canvas implements Runnable, KeyListener  {
@@ -29,6 +30,7 @@ public class Game extends Canvas implements Runnable, KeyListener  {
 
     private final BufferedImage image;
     private int CUR_LEVEL = 1, MAX_LEVEL = 2;
+    private boolean restartGame = false;
 
     public static List<Entity> entities;
     public static List<Enemy> enemies;
@@ -39,6 +41,7 @@ public class Game extends Canvas implements Runnable, KeyListener  {
     public static Player player;
 
     public static Random rand;
+    public static String gameState = "NORMAL";
 
     public UI ui;
 
@@ -93,25 +96,35 @@ public class Game extends Canvas implements Runnable, KeyListener  {
 
     public void tick() {
 
-        for (int i = 0; i < entities.size(); i++) {
-            Entity e = entities.get(i);
-            e.tick();
-        }
-
-        for (int i = 0; i < bullets.size(); i++) {
-            bullets.get(i).tick();
-        }
-
-        if (enemies.isEmpty()) {
-            CUR_LEVEL++;
-            if (CUR_LEVEL > MAX_LEVEL) {
-                CUR_LEVEL = 1;
+        if (gameState == "NORMAL") {
+            restartGame = false;
+            for (int i = 0; i < entities.size(); i++) {
+                Entity e = entities.get(i);
+                e.tick();
             }
-            String newWorld = "level" + CUR_LEVEL + ".png";
-            System.out.println(newWorld);
-            World.restartGame(newWorld);
-        }
 
+            for (int i = 0; i < bullets.size(); i++) {
+                bullets.get(i).tick();
+            }
+
+            if (enemies.isEmpty()) {
+                CUR_LEVEL++;
+                if (CUR_LEVEL > MAX_LEVEL) {
+                    CUR_LEVEL = 1;
+                }
+                String newWorld = "level" + CUR_LEVEL + ".png";
+                World.restartGame(newWorld);
+            }
+        } else if (gameState == "GAME_OVER") {
+            //Game Over
+            if (restartGame) {
+                restartGame = false;
+                gameState = "NORMAL";
+                CUR_LEVEL = 1;
+                String newWorld = "level" + CUR_LEVEL + ".png";
+                World.restartGame(newWorld);
+            }
+        }
     }
 
     public void render() {
@@ -142,7 +155,20 @@ public class Game extends Canvas implements Runnable, KeyListener  {
         g.setFont(new Font("arial", Font.BOLD, 20));
         g.setColor(Color.WHITE);
         g.drawString("Ammo: " + player.ammo, 580, 30);
+        gameOverText(g);
         bs.show();
+    }
+
+    private void gameOverText(Graphics g) {
+        if (Objects.equals(gameState, "GAME_OVER")) {
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setColor(new Color(0, 0, 0, 100));
+            g2.fillRect(0, 0, WIDTH*SCALE, HEIGHT*SCALE);
+            g.setFont(new Font("arial", Font.BOLD, 40));
+            g.setColor(Color.WHITE);
+            g.drawString("Game Over", (WIDTH*SCALE)/2 - 100, (HEIGHT*SCALE)/2);
+            g.drawString("Press Enter to restart", (WIDTH*SCALE)/2 - 200, (HEIGHT*SCALE)/2 + 50);
+        }
     }
 
     @Override
@@ -208,6 +234,10 @@ public class Game extends Canvas implements Runnable, KeyListener  {
             //Atirar
             Player player = (Player) entities.get(0);
             player.shoot = true;
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            restartGame = true;
         }
 
 //        if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
