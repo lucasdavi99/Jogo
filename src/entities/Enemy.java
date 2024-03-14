@@ -1,6 +1,7 @@
 package entities;
 
 import main.Game;
+import main.Sound;
 import world.Camera;
 import world.World;
 
@@ -70,6 +71,7 @@ public class Enemy extends Entity{
             }
         } else {
             if (Game.rand.nextInt(100) < 10) {
+                Sound.hurtEffect.play();
                 Game.player.life -= 1;
                 System.out.println("Vida: " + Game.player.life);
             }
