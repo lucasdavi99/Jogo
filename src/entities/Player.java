@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class Player extends Entity {
     public boolean right, up, left, down;
-    public double speed = 2;
+    public double speed = 1.5;
     public double life = 100, maxLife = 100;
     public int ammo= 0;
 
@@ -26,7 +26,10 @@ public class Player extends Entity {
 
     private boolean moved = false;
     private boolean hasGun = false;
-    public boolean shoot = false;
+    public boolean shoot = false, isJump = false;
+    public boolean jump = false;
+    public int z = 0;
+    public int jumpFrame = 50, jumpCur = 0;
 
     public Player(int x, int y, int width, int height, BufferedImage sprite) {
         super(x, y, width, height, sprite);
@@ -54,21 +57,37 @@ public class Player extends Entity {
     }
 
     public void tick() {
+        if (jump) {
+            if (!isJump) {
+                jump = false;
+            }
+        }
+
+        if (isJump) {
+            if (jumpCur < jumpFrame) {
+                 jumpCur++;
+                z = jumpCur;
+                if (jumpFrame == jumpCur) {
+                    isJump = false;
+                }
+            }
+        }
+
         moved = false;
         if(right && World.isFree((int) Math.round(this.getX() + speed), this.getY())) {
         moved = true;
-        x += speed;
+        x += (int) speed;
         } else if(left && World.isFree((int) Math.round(this.getX() - speed), this.getY())) {
         moved = true;
-        x -= speed;
+        x -= (int) speed;
         }
 
         if(up && World.isFree(this.getX(),(int) Math.round(this.getY() - speed))) {
             moved = true;
-            y-=speed;
+            y-= (int) speed;
         } else if(down && World.isFree(this.getX(), (int) Math.round(this.getY() + speed))){
             moved = true;
-            y+=speed;
+            y+= (int) speed;
         }
 
         if(moved) {

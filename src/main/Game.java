@@ -261,6 +261,10 @@ public class Game extends Canvas implements Runnable, KeyListener  {
             }
         }
 
+        if (e.getKeyCode() == KeyEvent.VK_Z) {
+            player.jump = true;
+        }
+
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             gameState = "MENU";
             menu.pause = true;

@@ -13,7 +13,7 @@ public class Sound {
 
     static {
         try {
-            musicBackground = new Sound("/music.wav");
+            musicBackground = new Sound("/musiac.wav");
         } catch (LineUnavailableException e) {
             throw new RuntimeException(e);
         }
