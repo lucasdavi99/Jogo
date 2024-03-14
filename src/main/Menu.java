@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.*;
+import java.util.Objects;
 
 public class Menu {
 
@@ -8,6 +9,7 @@ public class Menu {
     public int currentOption = 0;
     public int maxOption = options.length - 1;
     public boolean up, down, enter;
+    public boolean pause = false;
 
     public void tick() {
         if (up) {
@@ -23,11 +25,22 @@ public class Menu {
                 currentOption = 0;
             }
         }
+
+        if (enter) {
+            enter = false;
+            if (Objects.equals(options[currentOption], "novo jogo") || Objects.equals(options[currentOption], "continuar")) {
+                Game.gameState = "NORMAL";
+                pause = false;
+            } else if (Objects.equals(options[currentOption], "sair")) {
+                System.exit(1);
+            }
+        }
     }
 
     public void render(Graphics g) {
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, Game.WIDTH * Game.SCALE, Game.HEIGHT * Game.SCALE);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setColor(new Color(0, 0, 0, 100));
+        g2.fillRect(0, 0, Game.WIDTH * Game.SCALE, Game.HEIGHT * Game.SCALE);
         g.setColor(Color.YELLOW);
         g.setFont(new Font("arial", Font.BOLD, 36));
         g.drawString("Meu primeiro jogo", (Game.WIDTH * Game.SCALE) / 2 - 150, (Game.HEIGHT * Game.SCALE) / 2 - 160);
@@ -41,7 +54,12 @@ public class Menu {
         } else {
             g.drawString(" ", (Game.WIDTH * Game.SCALE) / 2 - 20, (Game.HEIGHT * Game.SCALE) / 2 - 60);
         }
-        g.drawString("Novo jogo", (Game.WIDTH * Game.SCALE) / 2 - 50, (Game.HEIGHT * Game.SCALE) / 2 - 60);
+
+        if (!pause) {
+            g.drawString("Novo jogo", (Game.WIDTH * Game.SCALE) / 2 - 50, (Game.HEIGHT * Game.SCALE) / 2 - 60);
+        } else {
+            g.drawString("Continuar", (Game.WIDTH * Game.SCALE) / 2 - 50, (Game.HEIGHT * Game.SCALE) / 2 - 60);
+        }
 
         if (currentOption == 1) {
             g.drawString(">", (Game.WIDTH * Game.SCALE) / 2 - 95, (Game.HEIGHT * Game.SCALE) / 2 - 20);
