@@ -298,5 +298,9 @@ public class Game extends Canvas implements Runnable, KeyListener  {
             Player player = (Player) entities.get(0);
             player.down = false;
         }
+
+        if (e.getKeyCode() == KeyEvent.VK_Z) {
+            player.jump = false;
+        }
     }
 }

@@ -26,10 +26,12 @@ public class Player extends Entity {
 
     private boolean moved = false;
     private boolean hasGun = false;
-    public boolean shoot = false, isJump = false;
+    public boolean shoot = false;
     public boolean jump = false;
+    public boolean isJump = false;
     public int z = 0;
     public int jumpFrame = 50, jumpCur = 0;
+    public boolean jumpUp = false, jumpDown = false;
 
     public Player(int x, int y, int width, int height, BufferedImage sprite) {
         super(x, y, width, height, sprite);
@@ -60,16 +62,26 @@ public class Player extends Entity {
         if (jump) {
             if (!isJump) {
                 jump = false;
+                isJump = true;
+                jumpUp = true;
             }
         }
 
         if (isJump) {
-            if (jumpCur < jumpFrame) {
-                 jumpCur++;
-                z = jumpCur;
-                if (jumpFrame == jumpCur) {
-                    isJump = false;
+            if(jumpUp) {
+                jumpCur+=2;
+            }else if (jumpDown) {
+                jumpCur-=2;
+                if (jumpCur <= 0) {
+                        jumpCur = 0;
+                        jumpDown = false;
+                        isJump = false;
                 }
+            }
+            z = jumpCur;
+            if (jumpCur >=jumpFrame) {
+                    jumpUp = false;
+                    jumpDown = true;
             }
         }
 
@@ -188,32 +200,37 @@ public class Player extends Entity {
         int gunHeight = 13;
 
         if(right) {
-            g.drawImage(rightPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+            g.drawImage(rightPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y-z, null);
             if (hasGun) {
-                g.drawImage(Entity.GUN_RIGHT, this.getX() - Camera.x + 10, this.getY() - Camera.y, gunWidth, gunHeight, null);
+                g.drawImage(Entity.GUN_RIGHT, this.getX() - Camera.x + 10, this.getY() - Camera.y-z, gunWidth, gunHeight, null);
             }
         } else if(left) {
-            g.drawImage(leftPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+            g.drawImage(leftPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y-z, null);
             if (hasGun) {
-                g.drawImage(Entity.GUN_LEFT, this.getX() - Camera.x - 10, this.getY() - Camera.y, gunWidth, gunHeight, null);
+                g.drawImage(Entity.GUN_LEFT, this.getX() - Camera.x - 10, this.getY() - Camera.y-z, gunWidth, gunHeight, null);
             }
         } else if(up) {
-            g.drawImage(upPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+            g.drawImage(upPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y-z, null);
             if (hasGun) {
-                g.drawImage(Entity.GUN_UP, this.getX() - Camera.x, this.getY() - Camera.y - 10, gunWidth, gunHeight, null);
+                g.drawImage(Entity.GUN_UP, this.getX() - Camera.x, this.getY() - Camera.y - 10-z, gunWidth, gunHeight, null);
             }
         } else if(down) {
-            g.drawImage(downPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+            g.drawImage(downPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y-z, null);
             if (hasGun) {
-                g.drawImage(Entity.GUN_DOWN, this.getX() - Camera.x, this.getY() - Camera.y + 10, gunWidth, gunHeight, null);
+                g.drawImage(Entity.GUN_DOWN, this.getX() - Camera.x, this.getY() - Camera.y + 10 -z, gunWidth, gunHeight, null);
             }
         } else {
-            g.drawImage(rightPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+            g.drawImage(rightPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y-z, null);
             if (hasGun) {
-                g.drawImage(Entity.GUN_RIGHT, this.getX() - Camera.x + 10, this.getY() - Camera.y, gunWidth, gunHeight, null);
+                g.drawImage(Entity.GUN_RIGHT, this.getX() - Camera.x + 10, this.getY() - Camera.y-z, gunWidth, gunHeight, null);
             } else {
-                g.drawImage(rightPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+                g.drawImage(rightPlayer[index], this.getX() - Camera.x, this.getY() - Camera.y-z, null);
             }
+        }
+
+        if (isJump) {
+            g.setColor(Color.BLACK);
+            g.fillOval(this.getX() - Camera.x + 8, this.getY() - Camera.y + 16, 8, 8);
         }
     }
 }
